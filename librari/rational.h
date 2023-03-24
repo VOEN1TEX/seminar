@@ -2,7 +2,7 @@
 #define RATIONAL_H
 #include <iostream>
 
-int GCD(int a, int b);
+int GCD(int first, int second);
 
 class RationalDivisionByZero : public std::runtime_error {
  public:

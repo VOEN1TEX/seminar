@@ -1,15 +1,13 @@
 #include "rational.h"
 
-int GCD(int a, int b) {
-  while (a > 0 && b > 0) {
-    if (a > b) {
-      a -= b;
-    } else {
-      b -= a;
-    }
+int GCD(int first, int second) {
+  while (second != 0) {
+    int store = second;
+    second = first % second;
+    first = store;
   }
 
-  return (a > b ? a : b);
+  return first;
 }
 
 void Rational::Reduce() {
@@ -17,15 +15,14 @@ void Rational::Reduce() {
     throw RationalDivisionByZero();
   }
 
+  int gcd = GCD(p_, q_);
+  p_ /= gcd;
+  q_ /= gcd;
+
   if (q_ < 0) {
     q_ = -q_;
     p_ = -p_;
   }
-  int sign = (p_ > 0 ? 1 : (p_ = -p_, -1));  //для корректной работы gcd
-  int gcd = GCD(p_, q_);
-  p_ /= gcd;
-  p_ *= sign;
-  q_ /= gcd;
 }
 
 Rational::Rational(int p, int q) {
@@ -128,11 +125,12 @@ Rational Rational::operator--(int) {
 }
 
 std::ostream& operator<<(std::ostream& output, const Rational& val) {
+  output << val.GetNumerator();
+  
   if (val.GetDenominator() != 1) {
-    output << val.GetNumerator() << "/" << val.GetDenominator();
-  } else {
-    output << val.GetNumerator();
+    output << "/" << val.GetDenominator();
   }
+
   return output;
 }
 
@@ -144,10 +142,9 @@ std::istream& operator>>(std::istream& input, Rational& val) {
 
   int i = 0;
   while (input_string[i] != 0 && input_string[i] != '/') {
-    if (input_string[i] == '+') {
-    } else if (input_string[i] == '-') {
+    if (input_string[i] == '-') {
       sign *= -1;
-    } else {
+    } else if (input_string[i] != '+') {
       val.SetNumerator(val.GetNumerator() * 10 + (input_string[i] - '0'));
     }
     ++i;
