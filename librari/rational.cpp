@@ -8,6 +8,7 @@ int GCD(int a, int b) {
       b -= a;
     }
   }
+
   return (a > b ? a : b);
 }
 
@@ -20,8 +21,7 @@ void Rational::Reduce() {
     q_ = -q_;
     p_ = -p_;
   }
-
-  int sign = (p_ > 0 ? 1 : (p_ = -p_, -1));  //при необходимости меняем числител,
+  int sign = (p_ > 0 ? 1 : (p_ = -p_, -1));  //для корректной работы gcd
   int gcd = GCD(p_, q_);
   p_ /= gcd;
   p_ *= sign;
@@ -80,36 +80,28 @@ Rational Rational::operator+() const {
 Rational& Rational::operator+=(const Rational& first) {
   p_ = p_ * first.q_ + first.p_ * q_;
   q_ = q_ * first.q_;
-
   Reduce();
-
   return *this;
 }
 
 Rational& Rational::operator-=(const Rational& first) {
   p_ = p_ * first.q_ - first.p_ * q_;
   q_ = q_ * first.q_;
-
   Reduce();
-
   return *this;
 }
 
 Rational& Rational::operator*=(const Rational& first) {
   p_ = p_ * first.p_;
   q_ = q_ * first.q_;
-
   Reduce();
-
   return *this;
 }
 
 Rational& Rational::operator/=(const Rational& first) {
   p_ = p_ * first.q_;
   q_ = q_ * first.p_;
-
   Reduce();
-
   return *this;
 }
 
@@ -146,18 +138,17 @@ std::ostream& operator<<(std::ostream& output, const Rational& val) {
 
 std::istream& operator>>(std::istream& input, Rational& val) {
   val = 0;
-
-  char string[50];
-  input >> string;
+  int sign = 1;
+  char input_string[50];
+  input >> input_string;
 
   int i = 0;
-  int sign = 1;
-  while (string[i] != 0 && string[i] != '/') {
-    if (string[i] == '+') {
-    } else if (string[i] == '-') {
+  while (input_string[i] != 0 && input_string[i] != '/') {
+    if (input_string[i] == '+') {
+    } else if (input_string[i] == '-') {
       sign *= -1;
     } else {
-      val.SetNumerator(val.GetNumerator() * 10 + (string[i] - '0'));
+      val.SetNumerator(val.GetNumerator() * 10 + (input_string[i] - '0'));
     }
     ++i;
   }
@@ -165,19 +156,22 @@ std::istream& operator>>(std::istream& input, Rational& val) {
   int denominator = 0;
   bool denominator_exists = false;
 
-  while (string[i] != 0) {
-    if (string[i] == '/' || string[i] == '+') {
-    } else if (string[i] == '-') {
+  while (input_string[i] != 0) {
+    if (input_string[i] == '-') {
       sign *= -1;
-    } else {
+    } else if (input_string[i] != '/' && input_string[i] != '+') {
       denominator_exists = true;
-      denominator = denominator * 10 + (string[i] - '0');
+      denominator = denominator * 10 + (input_string[i] - '0');
     }
     ++i;
   }
 
   val.SetNumerator(val.GetNumerator() * sign);
-  val.SetDenominator(denominator == 0 ? (denominator_exists ? 0 : 1) : denominator);
+  if (denominator == 0) {
+    val.SetDenominator(denominator_exists ? 0 : 1);
+  } else {
+    val.SetDenominator(denominator);
+  }
   return input;
 }
 

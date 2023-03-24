@@ -11,11 +11,6 @@ class RationalDivisionByZero : public std::runtime_error {
 };
 
 class Rational {
- private:
-  int p_ = 1;
-  int q_ = 1;
-  void Reduce();
-
  public:
   int GetNumerator() const;
   int GetDenominator() const;
@@ -41,6 +36,12 @@ class Rational {
 
   Rational& operator--();
   Rational operator--(int);
+
+ private:
+  int p_ = 0;
+  int q_ = 1;
+
+  void Reduce();
 };
 
 std::istream& operator>>(std::istream& input, Rational& val);
