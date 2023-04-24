@@ -8,9 +8,12 @@ class UniquePtr {
  public:
   explicit UniquePtr() noexcept : ptr_(nullptr) {
   }
+
   explicit UniquePtr(T* other) noexcept : ptr_(other) {
   }
+
   UniquePtr(const UniquePtr<T>& other) = delete;
+
   UniquePtr& operator=(const UniquePtr<T>& other) = delete;
 
   UniquePtr(UniquePtr&& other) noexcept {
@@ -26,6 +29,7 @@ class UniquePtr {
     if (ptr_ != ptr) {
       delete ptr_;
     }
+
     ptr_ = ptr;
   }
 
