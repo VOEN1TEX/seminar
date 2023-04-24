@@ -27,6 +27,7 @@ int Strncmp(const char* first, const char* second, std::size_t count) {
     ++second;
     --count;
   }
+  
   return (count == 0 ? 0 : *first - *second);
 }
 
