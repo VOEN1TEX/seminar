@@ -2,6 +2,7 @@
 
 StringView::StringView(const char* ptr) noexcept {  // NOLINT
   ptr_ = ptr;
+  
   while (ptr_[len_] != 0) {
     ++len_;
   }
