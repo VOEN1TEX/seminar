@@ -12,9 +12,11 @@ template <class T, size_t N = 0>
 class Array {
  public:
   T array_[N];
+
   size_t Size() const noexcept {
     return N;
   }
+
   const T& operator[](size_t index) const {
     return array_[index];
   }
@@ -27,6 +29,7 @@ class Array {
     if (index >= N) {
       throw ArrayOutOfRange();
     }
+
     return array_[index];
   }
 
@@ -34,6 +37,7 @@ class Array {
     if (index >= N) {
       throw ArrayOutOfRange();
     }
+    
     return array_[index];
   }
 
