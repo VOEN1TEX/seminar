@@ -25,19 +25,19 @@ int Strncmp(const char* first, const char* second, std::size_t count) {
     ++second;
     --count;
   }
-  
+
   return (count == 0 ? 0 : *first - *second);
 }
 
 char* Strcpy(char* dest, const char* src) {
   std::size_t curr = 0;
-  
+
   for (; src[curr] != 0; ++curr) {
     dest[curr] = src[curr];
     ++curr;
   }
 
-  *dest[curr] = '\0';
+  dest[curr] = '\0';
   return dest;
 }
 
@@ -61,7 +61,7 @@ char* Strncpy(char* dest, const char* src, std::size_t count) {
 
 char* Strcat(char* dest, const char* src) {
   std::size_t curr = 0;
-  
+
   while (dest[0] != 0) {
     ++curr;
   }
@@ -72,7 +72,7 @@ char* Strcat(char* dest, const char* src) {
     ++src;
   }
 
-  *curr_dest = '\0';
+  dest[curr] = '\0';
   return dest;
 }
 
@@ -147,7 +147,7 @@ std::size_t Strcspn(const char* dest, const char* src) {
   std::size_t amount = 0;
 
   while (dest[amount] != 0) {
-    curr = 0
+    curr = 0;
 
     while (src[curr] != 0 && dest[amount] != src[curr]) {
       ++curr;
@@ -187,14 +187,14 @@ const char* Strstr(const char* str, const char* pattern) {
   while (*str != 0) {
     if (*str == *pattern) {
       std::size_t curr_str = 0;
-      std::size_t curr_pattern = pattern;
+      std::size_t curr_pattern = pattern - str;
 
       while (str[curr_str] != 0) {
         if (pattern[curr_pattern] == 0) {
           return str;
         }
 
-        if (str[curr] != pattern[curr_pattern]) {
+        if (str[curr_str] != pattern[curr_pattern]) {
           break;
         }
 
@@ -202,14 +202,14 @@ const char* Strstr(const char* str, const char* pattern) {
         ++curr_str;
       }
 
-      if (curr[curr_pattern] == 0) {
+      if (str[curr_pattern] == 0) {
         return str;
       }
 
     }
- 
+
     ++str;
   }
- 
+
   return nullptr;
 }
