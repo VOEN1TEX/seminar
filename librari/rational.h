@@ -1,6 +1,8 @@
 #ifndef RATIONAL_H
 #define RATIONAL_H
 #include <iostream>
+#include <cassert>
+#include <sstream>
 
 int GCD(int first, int second);
 
